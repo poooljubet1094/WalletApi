@@ -8,7 +8,5 @@ public class TransactionViewModel : TransactionBaseViewModel
     [Required]
     public Int64 toAccountNumber { get; set; }
     [Required]
-    public DateTime TransactionDate { get; set; }
-    public decimal EndBalance { get; set; }
     public TransactionType TransactionType { get; set; }
 }

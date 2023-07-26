@@ -37,12 +37,12 @@ public class BalanceTransactionService : IBalanceTransactionService
             result.Add("You cannot transfer balance to the same account!");
         }
 
-        var endBalance = await ComputeEndBalance(transaction.AccountNumber, transaction.Amount, TransactionType.BalanceTransfer);;
+        // var endBalance = await ComputeEndBalance(transaction.AccountNumber, transaction.Amount, TransactionType.BalanceTransfer);;
 
-        if (endBalance < 0)
-        {
-            result.Add("You do not have enough balance to process this transaction.");
-        }
+        // if (endBalance < 0)
+        // {
+        //     result.Add("You do not have enough balance to process this transaction.");
+        // }
 
         return result;
     }
@@ -56,12 +56,12 @@ public class BalanceTransactionService : IBalanceTransactionService
             result.Add("Account Number not found!");
         }
 
-        var endBalance = await ComputeEndBalance(transaction.AccountNumber, transaction.Amount, type);
+        // var endBalance = await ComputeEndBalance(transaction.AccountNumber, transaction.Amount, type);
 
-        if (endBalance < 0)
-        {
-            result.Add("You do not have enough balance to process this transaction.");
-        }
+        // if (endBalance < 0)
+        // {
+        //     result.Add("You do not have enough balance to process this transaction.");
+        // }
 
         return result;
     }
@@ -94,8 +94,6 @@ public class BalanceTransactionService : IBalanceTransactionService
             Amount = transaction.Amount,
             AccountNumber = transaction.AccountNumber,
             toAccountNumber = transaction.AccountNumber,
-            TransactionDate = DateTime.Now,
-            EndBalance = await ComputeEndBalance(transaction.AccountNumber, transaction.Amount, TransactionType.Deposit),
             TransactionType = TransactionType.Deposit
         };
 
@@ -109,8 +107,6 @@ public class BalanceTransactionService : IBalanceTransactionService
             Amount = transaction.Amount,
             AccountNumber = transaction.AccountNumber,
             toAccountNumber = transaction.AccountNumber,
-            TransactionDate = DateTime.Now,
-            EndBalance = await ComputeEndBalance(transaction.AccountNumber, transaction.Amount, TransactionType.Withdraw),
             TransactionType = TransactionType.Withdraw
         };
 
@@ -124,8 +120,6 @@ public class BalanceTransactionService : IBalanceTransactionService
             Amount = transaction.Amount,
             AccountNumber = transaction.AccountNumber,
             toAccountNumber = transaction.toAccountNumber,
-            TransactionDate = DateTime.Now,
-            EndBalance = await ComputeEndBalance(transaction.AccountNumber, transaction.Amount, TransactionType.BalanceTransfer),
             TransactionType = TransactionType.BalanceTransfer
         };
 
@@ -151,8 +145,6 @@ public class BalanceTransactionService : IBalanceTransactionService
             cmd.Parameters.Add(new SqlParameter("@Amount", transaction.Amount));
             cmd.Parameters.Add(new SqlParameter("@FromAccountNumber", transaction.AccountNumber));
             cmd.Parameters.Add(new SqlParameter("@ToAccountNumber", transaction.toAccountNumber));
-            cmd.Parameters.Add(new SqlParameter("@TransactionDate", transaction.TransactionDate));
-            cmd.Parameters.Add(new SqlParameter("@EndBalance", transaction.EndBalance));
             cmd.Parameters.Add(new SqlParameter("@TransactionType", transaction.TransactionType));
             await conn.OpenAsync();
             using (var reader = await cmd.ExecuteReaderAsync())
@@ -169,7 +161,7 @@ public class BalanceTransactionService : IBalanceTransactionService
                 }
             }
         }
-
+        
         return transactionHistory;
     }
 }

@@ -1,3 +1,4 @@
+using System.Data.SqlClient;
 using Microsoft.AspNetCore.Mvc;
 using WalletApi.Models;
 using WalletApi.Services.Abstract;
@@ -25,14 +26,20 @@ public class UserController : ControllerBase
         {
             return BadRequest(ModelState);
         }
-
-        if (await _userRegistrationService.UserExist(register))
+        
+        try
         {
-            return BadRequest("User already exists.");
+            var user = await _userRegistrationService.AddUser(register);
+            return Ok(user);
+        }
+        catch(SqlException ex)
+        {
+            if (ex.Number == 2627)
+            {
+                return BadRequest("User already exists.");
+            }
         }
 
-        var user = await _userRegistrationService.AddUser(register);
-
-        return Ok(user);
+        return StatusCode(500);
     }
 }

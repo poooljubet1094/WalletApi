@@ -1,3 +1,4 @@
+using System.Data.SqlClient;
 using Microsoft.AspNetCore.Mvc;
 using WalletApi.Models;
 using WalletApi.Services.Abstract;
@@ -33,9 +34,15 @@ public class WalletController : ControllerBase
             return BadRequest(validationError);
         }
 
-        var transactionHistory = await _balanceTransactionService.ProcessDeposit(transaction);
-
-        return Ok(transactionHistory);
+        try
+        {
+            var transactionHistory = await _balanceTransactionService.ProcessDeposit(transaction);
+            return Ok(transactionHistory);
+        }
+        catch(SqlException ex)
+        {
+            return BadRequest(ex.Message);
+        }
     }
 
     [HttpPost]
@@ -53,10 +60,15 @@ public class WalletController : ControllerBase
         {
             return BadRequest(validationError);
         }
-
-        var transactionHistory = await _balanceTransactionService.ProcessWithdraw(transaction);
-
-        return Ok(transactionHistory);
+        try
+        {
+            var transactionHistory = await _balanceTransactionService.ProcessWithdraw(transaction);
+            return Ok(transactionHistory);
+        }
+        catch(SqlException ex)
+        {
+            return BadRequest(ex.Message);
+        }
     }
 
     [HttpPost]
@@ -75,8 +87,14 @@ public class WalletController : ControllerBase
             return BadRequest(validationError);
         }
 
-        var transactionHistory = await _balanceTransactionService.ProcessTranferBalacne(transaction);
-
-        return Ok(transactionHistory);
+        try
+        {
+            var transactionHistory = await _balanceTransactionService.ProcessTranferBalacne(transaction);
+            return Ok(transactionHistory);
+        }
+        catch(SqlException ex)
+        {
+            return BadRequest(ex.Message);
+        }
     }
 }

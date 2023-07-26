@@ -42,6 +42,27 @@ ALTER TABLE [dbo].[Users] ADD UNIQUE NONCLUSTERED
 GO
 ALTER TABLE [dbo].[Users] ADD  DEFAULT ((0)) FOR [Balance]
 GO
+CREATE FUNCTION GetEndBalance (
+	@Balance DECIMAL,
+    @Amount DECIMAL,
+    @TransactionType INT
+)
+RETURNS BIGINT AS
+BEGIN
+	DECLARE @return_value DECIMAL;
+
+    IF (@TransactionType = 0)
+    BEGIN
+        SET @return_value = @Balance + @Amount;
+    END
+
+    IF (@TransactionType = 1 OR @TransactionType = 2)
+    BEGIN
+        SET @return_value =@Balance - @Amount;
+    END
+ 
+    RETURN @return_value
+END;
 CREATE PROCEDURE [dbo].[RegisterUser]
     @LoginName varchar(255),
     @Password varchar(255)
@@ -104,14 +125,25 @@ AS
     WHERE
         AccountNumber = @AccountNumber;
 GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
 CREATE PROCEDURE [dbo].[ProcessWalletTransaction]
     @Amount DECIMAL,
     @FromAccountNumber BIGINT,
     @ToAccountNumber BIGINT,
-    @TransactionDate DATETIME,
-    @EndBalance DECIMAL,
     @TransactionType INT
 AS
+    DECLARE @FromEndBalance DECIMAL;
+
+    SELECT TOP 1 @FromEndBalance = dbo.GetEndBalance(Balance, @Amount, @TransactionType) FROM dbo.Users WHERE AccountNumber = @FromAccountNumber;
+
+    IF (@FromEndBalance < 0)
+    BEGIN
+        PRINT N'You dont have balance to proceed in this request.';
+        THROW 51000, 'You dont have balance to proceed in this request.', 1;
+    END
 
     INSERT INTO [dbo].[TransactionHistory] (
         Amount,
@@ -124,8 +156,8 @@ AS
         @Amount,
         @FromAccountNumber,
         @ToAccountNumber,
-        @TransactionDate,
-        @EndBalance,
+        (SELECT GETDATE()),
+        @FromEndBalance,
         @TransactionType
     );
 
@@ -175,3 +207,4 @@ AS
     WHERE
         TransactionId = SCOPE_IDENTITY();
 GO
+

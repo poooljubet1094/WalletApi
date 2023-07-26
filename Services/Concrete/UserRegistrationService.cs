@@ -70,24 +70,24 @@ public class UserRegistrationService : IUserRegistrationService
         return user;
     }
 
-    public async Task<bool> UserExist(RegisterViewModel user)
-    {
-        using (var conn = new SqlConnection(_connString))
-        {
-            string sqlQuery = "SELECT COUNT(UserId) FROM [dbo].[Users] WHERE LoginName = @LoginName GROUP BY UserId;";
-            SqlCommand cmd = new SqlCommand(sqlQuery, conn);
-            cmd.Parameters.Add(new SqlParameter("@LoginName", user.LoginName));
+    // public async Task<bool> UserExist(RegisterViewModel user)
+    // {
+    //     using (var conn = new SqlConnection(_connString))
+    //     {
+    //         string sqlQuery = "SELECT COUNT(UserId) FROM [dbo].[Users] WHERE LoginName = @LoginName GROUP BY UserId;";
+    //         SqlCommand cmd = new SqlCommand(sqlQuery, conn);
+    //         cmd.Parameters.Add(new SqlParameter("@LoginName", user.LoginName));
 
-            await conn.OpenAsync();
-            using (var reader = await cmd.ExecuteReaderAsync())
-            {
-                if (reader.HasRows)
-                {
-                    return true;
-                }
-            }
-        }
+    //         await conn.OpenAsync();
+    //         using (var reader = await cmd.ExecuteReaderAsync())
+    //         {
+    //             if (reader.HasRows)
+    //             {
+    //                 return true;
+    //             }
+    //         }
+    //     }
 
-        return false;
-    }
+    //     return false;
+    // }
 }
