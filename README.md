@@ -11,3 +11,4 @@ There are things I want to improve if I have more time.
 1. Implement Authentication and Authorization.
 2. Implement more definitive names for the routes such as api version and currency.
 3. Implement database indexes.
+4. Implement unit and integration testing.
