@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WalletApi", "WebApi\WalletApi.csproj", "{3E810A50-0207-4084-BD89-80BA64020410}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTesting", "UnitTesting\UnitTesting.csproj", "{235B0F19-9169-4C85-B890-1F71E3C26785}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3E810A50-0207-4084-BD89-80BA64020410}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3E810A50-0207-4084-BD89-80BA64020410}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3E810A50-0207-4084-BD89-80BA64020410}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3E810A50-0207-4084-BD89-80BA64020410}.Release|Any CPU.Build.0 = Release|Any CPU
+		{235B0F19-9169-4C85-B890-1F71E3C26785}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{235B0F19-9169-4C85-B890-1F71E3C26785}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{235B0F19-9169-4C85-B890-1F71E3C26785}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{235B0F19-9169-4C85-B890-1F71E3C26785}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
