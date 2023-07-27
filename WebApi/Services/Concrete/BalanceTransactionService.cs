@@ -37,13 +37,6 @@ public class BalanceTransactionService : IBalanceTransactionService
             result.Add("You cannot transfer balance to the same account!");
         }
 
-        // var endBalance = await ComputeEndBalance(transaction.AccountNumber, transaction.Amount, TransactionType.BalanceTransfer);;
-
-        // if (endBalance < 0)
-        // {
-        //     result.Add("You do not have enough balance to process this transaction.");
-        // }
-
         return result;
     }
 
@@ -55,13 +48,6 @@ public class BalanceTransactionService : IBalanceTransactionService
         {
             result.Add("Account Number not found!");
         }
-
-        // var endBalance = await ComputeEndBalance(transaction.AccountNumber, transaction.Amount, type);
-
-        // if (endBalance < 0)
-        // {
-        //     result.Add("You do not have enough balance to process this transaction.");
-        // }
 
         return result;
     }
