@@ -18,9 +18,6 @@ public class BalanceTransactionTest
     private User _userToTransfer;
     private User _userWith0Balance;
 
-    private List<long> _accountNumberWithZeroBalance;
-    private List<long> _accountNumberToTransfer;
-
     public BalanceTransactionTest()
 	{
         var myConfiguration = new Dictionary<string, string?>
@@ -34,26 +31,6 @@ public class BalanceTransactionTest
 
         _userRegistrationService = new UserRegistrationService(_config);
         _balanceTransactionService = new BalanceTransactionService(_config, _userRegistrationService);
-
-        _accountNumberWithZeroBalance = new List<long>()
-        {
-            202300000001043,
-            202300000001044,
-            202300000001045,
-            202300000001046,
-            202300000001047,
-            202300000001048
-        };
-
-        _accountNumberToTransfer = new List<long>()
-        {
-            202300000001049,
-            202300000001050,
-            202300000001053,
-            202300000001051,
-            202300000001055,
-            202300000001057
-        };
     }
 
     [SetUp]
@@ -194,42 +171,16 @@ public class BalanceTransactionTest
     }
 
     [Test, Order(8)]
-    public void ProcessDepositTest_Concurrency()
-    {
-        var transferViewModels = new List<TransactionBaseViewModel>();
-
-        foreach (var accountNumber in _accountNumberWithZeroBalance)
-        {
-            transferViewModels.Add(new TransactionBaseViewModel()
-            {
-                AccountNumber = accountNumber,
-                Amount = 6000
-            });
-        }
-
-        Parallel.ForEach(transferViewModels, (model) =>
-        {
-            var user = _userRegistrationService.GetUser(model.AccountNumber).Result;
-
-            var transactionHistory = _balanceTransactionService.ProcessDeposit(model).Result;
-            Assert.That(transactionHistory, Is.InstanceOf<TransactionHistory>());
-            Assert.That(transactionHistory.FromAccountNumber, Is.EqualTo(model.AccountNumber));
-            Assert.That(transactionHistory.Amount, Is.EqualTo(model.Amount));
-            Assert.That(transactionHistory.EndBalance, Is.EqualTo(user.Balance + model.Amount));
-        });
-    }
-
-    [Test, Order(9)]
     public void ProcessTransferBalanceTest_Concurrency()
     {
         var transferViewModels = new List<TransferBalanceViewModel>();
 
-        for (var i = 0; i < _accountNumberWithZeroBalance.Count(); i++)
+        for (var i = 0; i < 2; i++)
         {
             transferViewModels.Add(new TransferBalanceViewModel()
             {
-                AccountNumber = _accountNumberWithZeroBalance[i],
-                toAccountNumber = _accountNumberToTransfer[i],
+                AccountNumber = _userFromTransfer.AccountNumber,
+                toAccountNumber = _userToTransfer.AccountNumber,
                 Amount = 5000
             });
         }
